@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>데이터과학과 학생 페이지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F4F1;--ink:#15181A;--sub:#62686E;--line:#DADDD8;--card:#fff;--ev:#1D5BD8;--no:#B4530B;--sh:#0E7A55}
+@media (prefers-color-scheme:dark){:root{--bg:#0E1113;--ink:#EEF0EC;--sub:#9AA1A7;--line:#262B2F;--card:#161A1D;--ev:#7AA2FF;--no:#F0A35E;--sh:#4FD1A0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:760px;margin:0 auto;padding:clamp(32px,7vw,88px) 20px 64px}
+h1{margin:0;font-size:clamp(28px,4.4vw,44px);font-weight:800;letter-spacing:-.03em}
+.lead{margin:10px 0 40px;color:var(--sub)}
+ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+li a{display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:baseline;padding:20px 4px;border-bottom:1px solid var(--line);color:inherit;text-decoration:none}
+li a:hover .t{text-decoration:underline}
+li a:focus-visible{outline:2px solid var(--ev);outline-offset:2px}
+.k{font-size:13px;font-weight:800}
+.k.event{color:var(--ev)}.k.notice{color:var(--no)}.k.showcase{color:var(--sh)}
+.t{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.s{display:block;font-size:14px;color:var(--sub);margin-top:4px;font-weight:400}
+.d{font-size:13px;color:var(--sub);white-space:nowrap}
+.empty{padding:32px 4px;color:var(--sub)}
+@media (max-width:520px){li a{grid-template-columns:1fr}.d{order:-1}}
+</style>
+</head>
+<body>
+<main>
+  <h1>데이터과학과 학생 페이지</h1>
+  <p class="lead">진행 중인 행사, 공지, 학생 성과를 모아 둔 곳입니다.</p>
+  <ul id="list"><li class="empty">불러오는 중…</li></ul>
+</main>
+<script>
+var KIND = {event:'행사', notice:'공지', showcase:'성과'};
+fetch('/pages.json', {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(pages){
+  var today = new Date().toISOString().slice(0,10);
+  var live = pages.filter(function(p){ return !p.hidden && (!p.expires || p.expires >= today); })
+                  .sort(function(a,b){ return b.created.localeCompare(a.created); });
+  var ul = document.getElementById('list'); ul.innerHTML = '';
+  if(!live.length){ ul.innerHTML = '<li class="empty">지금 진행 중인 페이지가 없습니다.</li>'; return; }
+  live.forEach(function(p){
+    var li = document.createElement('li'), a = document.createElement('a');
+    a.href = '/' + p.slug + '/';
+    a.innerHTML = '<span class="k ' + p.type + '"></span><span class="t"><span class="s"></span></span><span class="d"></span>';
+    a.querySelector('.k').textContent = KIND[p.type] || '';
+    a.querySelector('.t').insertBefore(document.createTextNode(p.title), a.querySelector('.s'));
+    a.querySelector('.s').textContent = p.summary || '';
+    a.querySelector('.d').textContent = p.created.slice(5).replace('-','.');
+    li.appendChild(a); ul.appendChild(li);
+  });
+}).catch(function(){ document.getElementById('list').innerHTML = '<li class="empty">목록을 불러오지 못했습니다. 새로고침해 주세요.</li>'; });
+</script>
+</body>
+</html>

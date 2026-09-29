@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,500;112,800&family=Noto+Sans+KR:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#F4F6F2;--dim:rgba(244,246,242,.55);--sep:rgba(244,246,242,.35)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:#050807;
+  background-image:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(120,190,150,.28), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(40,70,55,.35), transparent 70%);
+  color:var(--ink);
+  font-family:"Archivo","Noto Sans KR","Malgun Gothic",sans-serif;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  overflow:hidden;
+}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.65));}
+.wrap{position:relative;z-index:1;padding:24px}
+h1{margin:0;font-family:"Noto Sans KR",sans-serif;font-weight:800;font-size:clamp(22px,2.6vw,42px);letter-spacing:.08em}
+.sub{margin:10px 0 0;font-family:"Noto Sans KR",sans-serif;font-weight:500;font-size:clamp(12px,1vw,16px);letter-spacing:.35em;color:var(--dim)}
+.timer{display:flex;justify-content:center;align-items:flex-start;gap:clamp(10px,1.6vw,28px);margin-top:clamp(24px,3.4vw,48px)}
+.unit{min-width:1.6em}
+.big{font-weight:800;font-variation-settings:"wdth" 112;font-size:clamp(56px,7.6vw,128px);line-height:1;font-variant-numeric:tabular-nums}
+.lab{margin-top:14px;font-weight:500;font-size:clamp(11px,1vw,16px);letter-spacing:.3em;color:var(--dim)}
+.colon{font-weight:800;font-size:clamp(40px,5.4vw,92px);line-height:1.15;color:var(--sep)}
+.ratio{margin-top:clamp(36px,5vw,72px)}
+.ratio .big{font-size:clamp(56px,7.6vw,128px)}
+.ev{margin-top:clamp(28px,3.6vw,52px);font-family:"Archivo","Noto Sans KR",sans-serif;font-weight:800;font-size:clamp(22px,2.6vw,44px);letter-spacing:.02em}
+.ev .k{font-family:"Noto Sans KR",sans-serif}
+.ev .won{font-family:"Noto Sans KR",sans-serif;font-size:.8em;margin-left:.15em}
+.foot{position:fixed;left:14px;bottom:10px;font-size:11px;color:rgba(244,246,242,.3);font-family:"Noto Sans KR",sans-serif}
+.fs{position:fixed;right:14px;bottom:10px;background:transparent;color:rgba(244,246,242,.4);border:1px solid rgba(244,246,242,.2);border-radius:6px;padding:6px 10px;font:500 12px "Noto Sans KR",sans-serif;cursor:pointer}
+.fs:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>데이터과학인의 밤 서비스 공모전</h1>
+  <p class="sub" id="sub">신청 마감까지</p>
+
+  <div class="timer" aria-live="off">
+    <div class="unit"><div class="big" id="mo">00</div><div class="lab">MONTHS</div></div>
+    <div class="colon">:</div>
+    <div class="unit"><div class="big" id="d">00</div><div class="lab">DAYS</div></div>
+    <div class="colon">:</div>
+    <div class="unit"><div class="big" id="h">00</div><div class="lab">HOURS</div></div>
+    <div class="colon">:</div>
+    <div class="unit"><div class="big" id="mi">00</div><div class="lab">MIN</div></div>
+    <div class="colon">:</div>
+    <div class="unit"><div class="big" id="s">00</div><div class="lab">SEC</div></div>
+  </div>
+
+  <div class="ratio">
+    <div class="big"><span id="r">-</span> <span style="color:var(--sep)">:</span> 1</div>
+    <div class="lab">경쟁률</div>
+  </div>
+
+  <div class="ev"><span class="k">당신의 기대수익 : </span><span id="ev">-</span><span class="won">원</span></div>
+</div>
+
+<div class="foot" id="upd"></div>
+<button class="fs" id="fs" title="전체화면 (F)">전체화면</button>
+
+<script>
+var target = null;
+function pad(n){ return String(n).padStart(2,'0'); }
+function set(id,v){ document.getElementById(id).textContent=v; }
+
+function tick(){
+  if(!target) return;
+  var now = new Date();
+  if(now >= target){ ['mo','d','h','mi','s'].forEach(function(i){ set(i,'00'); }); return; }
+  // 달력 기준 개월 수
+  var m = (target.getFullYear()-now.getFullYear())*12 + (target.getMonth()-now.getMonth());
+  var anchor = new Date(now); anchor.setMonth(now.getMonth()+m);
+  if(anchor > target){ m--; anchor = new Date(now); anchor.setMonth(now.getMonth()+m); }
+  var rest = Math.floor((target - anchor)/1000);
+  set('mo',pad(m));
+  set('d',pad(Math.floor(rest/86400))); rest%=86400;
+  set('h',pad(Math.floor(rest/3600))); rest%=3600;
+  set('mi',pad(Math.floor(rest/60)));
+  set('s',pad(rest%60));
+}
+
+/* 기대수익: 지금 신청하면 신청자는 n+1명.
+   수상 자리 k개 중 min(n+1, k)개가 채워지고, 그 상금 합을 n+1명이 나눠 가질 기대값 */
+function expected(n, prizes){
+  var N = n + 1, k = Math.min(N, prizes.length), sum = 0;
+  for(var i=0;i<k;i++) sum += prizes[i];
+  return Math.round(sum / N / 100) * 100;
+}
+
+function draw(s){
+  var dl = s.deadline || s.eventDate;
+  target = new Date(dl + (s.deadline ? 'T23:59:59' : 'T00:00:00'));
+  set('sub', s.deadline ? '신청 마감까지' : '행사까지');
+  var r = Math.round(s.n / Math.max(1,s.awards) * 10) / 10;
+  set('r', r.toFixed(1));
+  set('ev', expected(s.n, s.prizes || []).toLocaleString('ko-KR'));
+  set('upd', '신청 ' + s.n + s.unit + ' · 수상 ' + s.awards + s.unit + ' · 마지막 확인 ' + s.updatedAt);
+  tick();
+}
+
+function poll(){
+  google.script.run.withSuccessHandler(draw).withFailureHandler(function(){ set('upd','연결 확인 중…'); }).getStats();
+}
+poll(); setInterval(poll, 15000); setInterval(tick, 1000);
+
+function toggleFs(){ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(function(){}); }
+document.getElementById('fs').onclick = toggleFs;
+document.addEventListener('keydown', function(e){ if(e.key==='f'||e.key==='F') toggleFs(); });
+</script>
+</body>
+</html>
