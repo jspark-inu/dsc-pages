@@ -1,9 +1,18 @@
 {
-  // Cloudflare Worker "dsinu" — public/ 폴더를 정적 사이트로 배포
+  // Cloudflare Worker "dsinu" — public/ 폴더를 정적 사이트로 배포 + /api/* 만 src/worker.js가 처리
+  // routes를 적지 않음 → 대시보드에서 붙인 dsinu.com 커스텀 도메인은 그대로 유지
   "name": "dsinu",
+  "main": "src/worker.js",
   "compatibility_date": "2026-09-01",
   "assets": {
     "directory": "./public",
-    "not_found_handling": "404-page"
-  }
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  // 서비스 열람 횟수 카운터 (SQLite Durable Object — 무료 플랜 가능, 배포 시 자동 생성)
+  "durable_objects": {
+    "bindings": [{ "name": "HITS", "class_name": "Hits" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Hits"] }]
 }

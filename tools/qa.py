@@ -10,7 +10,8 @@ with sync_playwright() as p:
     b=p.chromium.launch()
     for w,h in [(1440,900),(390,844)]:
         pg=b.new_page(viewport={'width':w,'height':h}); errs=[]
-        pg.on('console', lambda m: errs.append(m.text) if m.type=='error' else None)
+        # 정적 서버에는 Worker(/api/*)가 없으므로 그 404만 제외
+        pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and '/api/' not in (m.location or {}).get('url','') else None)
         pg.on('pageerror', lambda e: errs.append(str(e)))
         pg.goto(f'http://127.0.0.1:{PORT}/',wait_until='networkidle'); pg.wait_for_timeout(1500)
         r=pg.evaluate('''()=>{

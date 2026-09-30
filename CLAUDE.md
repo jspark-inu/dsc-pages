@@ -24,6 +24,7 @@ Cloudflare Workers Builds가 이 저장소의 main 브랜치에 연결되어 있
 - `public/<slug>/index.html` — 페이지 하나 = 폴더 하나 = HTML 파일 하나
 - `templates/basic.html` — 새 페이지 뼈대(메타태그, 파비콘, 목록 링크)
 - `apps-script/` — 구글폼 응답 수를 JSON으로 주는 Apps Script 코드(배포는 구글 쪽에서 수동)
+- `src/worker.js` — `/api/*`만 처리. `POST /api/hit`(허브에서 서비스를 연 횟수, 같은 사람·서비스는 하루 1회), `GET /api/popular?days=7|30|365|all`. 저장소는 SQLite Durable Object `Hits`(배포 시 자동 생성). IP 원문은 저장하지 않음
 
 ## 서비스 데이터 구조 (apps.json) — 50개 이상 대비
 
@@ -41,7 +42,8 @@ Cloudflare Workers Builds가 이 저장소의 main 브랜치에 연결되어 있
 | cover |  | 스크린샷 경로 (/covers/<id>.webp, 1600×900 권장). 없으면 자동 차트 표지 |
 | tags |  | 자유 태그 |
 
-화면 반영: 피드(최신 순, 행사·소식과 섞임) + 서비스 디렉터리(전체 서비스 카드 격자, 분류 필터).
+화면 반영(thedieline.com 구조 그대로): 히어로 → 최신 행 12 → 2열 6 → 3열 나머지(서비스·소식 최신 순) → 전체 서비스 가로 슬라이드 → 분류별 슬라이드(분류에 운영 중 서비스 4개 이상일 때) → 많이 찾는 서비스(3개 이상 기록될 때, 이번 주/이번 달/올해/전체).
+더미 테스트: `https://dsinu.com/?demo=3` (N개, 최대 60). 기본 주소에는 절대 나오지 않는다.
 
 ## 서비스 이식 방식
 
