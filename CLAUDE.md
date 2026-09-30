@@ -6,7 +6,7 @@ main 브랜치에 푸시하면 Workers Builds가 `npx wrangler deploy`를 실행
 배포 설정은 `wrangler.jsonc`. `routes`를 넣지 말 것(대시보드의 dsinu.com 커스텀 도메인이 덮어써짐).
 
 ## 구조
-- `public/index.html` — 첫 화면(Dieline식 매거진: 마스트헤드 · 분류 내비 · 리드 · 그리드 · 서비스 디렉터리). `pages.json`·`apps.json`을 읽어 자동으로 그린다. 직접 수정할 일 거의 없음
+- `public/index.html` — 첫 화면(흰 배경 매거진: 고정 헤더[로고+분류 내비] · 21:9 리드 · 최신 그리드 · 서비스 3열 그리드, Wanted Sans, 라이트 전용). `pages.json`·`apps.json`을 읽어 자동으로 그린다. 직접 수정할 일 거의 없음
 - `public/pages.json` — 페이지 목록(단일 기준). 페이지를 만들거나 내리면 반드시 같이 수정
   - 선택 필드: `tags`(문자열 배열, 카드 위 분류 옆에 표시), `cover`(`"/<slug>/cover.jpg"` 등 사진 경로. 없으면 slug 기준 데이터 차트 표지가 자동 생성)
 - `public/apps.json` — 학과 서비스 디렉터리. `status`: `live`(운영 중) | `soon`(준비 중, 클릭 불가) | `hidden`
