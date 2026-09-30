@@ -2,15 +2,13 @@
   {
     "id": "jobs",
     "name": "인력사무소",
-    "summary": "학과의 문제를 올리고 해결하면 마일리지를 받는 곳",
+    "summary": "학과의 문제를 올리고, 해결하면 마일리지를 받는 곳",
+    "category": "학과생활",
     "url": "https://jobs.dsinu.com",
-    "status": "soon"
-  },
-  {
-    "id": "contest-2026",
-    "name": "서비스 공모전 현황",
-    "summary": "데이터과학인의 밤 공모전 실시간 경쟁률",
-    "url": "/contest-2026/",
-    "status": "live"
+    "host": "subdomain",
+    "status": "soon",
+    "created": "2026-09-30",
+    "makers": [],
+    "tags": []
   }
 ]

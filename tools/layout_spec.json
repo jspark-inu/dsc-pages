@@ -1,0 +1,15 @@
+{
+  "_source": "thedieline.com @1440px 실측 (2026-09-30)",
+  "page_margin_px": 48,
+  "content_width_px": 1344,
+  "masthead": { "fill": "콘텐츠 폭 100%를 워드마크가 채움", "tagline": "굵은 16px 한 줄" },
+  "pill": { "height": 40, "radius": "full", "border": "1px #DADADA", "font": "16px / 500", "gap": 8, "dark_variant": "검정 배경 흰 글자" },
+  "rule_after_nav": "1px 검정",
+  "hero": { "image": "콘텐츠 폭 100%", "h1": "40px / 900 / line-height 44px", "dek": "16px / 1.7" },
+  "feed_row": {
+    "top_rule": "1px 검정", "padding_top": 24, "gap": 24,
+    "image_width_px": 990, "text_col_px": 330, "image_ratio": "16:9",
+    "title": "20px / 700 / 24px", "category": "20px / 400 / 25px", "dek": "14px / 21px",
+    "row_bottom_space": 100
+  }
+}
