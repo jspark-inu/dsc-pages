@@ -1,11 +1,15 @@
 # dsc-pages — 학과 학생 대상 페이지 저장소
 
 데이터과학과 학생에게 공지하는 이벤트·공지·성과 홍보 페이지를 만들고 내리는 저장소.
-`public/` 폴더가 그대로 Cloudflare Pages로 배포된다. main 브랜치에 푸시하면 1분 안에 공개된다.
+`public/` 폴더가 Cloudflare Worker `dsinu`(dsinu.com)의 정적 자산으로 배포된다.
+main 브랜치에 푸시하면 Workers Builds가 `npx wrangler deploy`를 실행해 1~2분 안에 공개된다. zip 수동 업로드 금지.
+배포 설정은 `wrangler.jsonc`. `routes`를 넣지 말 것(대시보드의 dsinu.com 커스텀 도메인이 덮어써짐).
 
 ## 구조
-- `public/index.html` — 목록 첫 화면. `public/pages.json`을 읽어 자동으로 그린다. 직접 수정할 일 거의 없음
+- `public/index.html` — 첫 화면(Dieline식 매거진: 마스트헤드 · 분류 내비 · 리드 · 그리드 · 서비스 디렉터리). `pages.json`·`apps.json`을 읽어 자동으로 그린다. 직접 수정할 일 거의 없음
 - `public/pages.json` — 페이지 목록(단일 기준). 페이지를 만들거나 내리면 반드시 같이 수정
+  - 선택 필드: `tags`(문자열 배열, 카드 위 분류 옆에 표시), `cover`(`"/<slug>/cover.jpg"` 등 사진 경로. 없으면 slug 기준 데이터 차트 표지가 자동 생성)
+- `public/apps.json` — 학과 서비스 디렉터리. `status`: `live`(운영 중) | `soon`(준비 중, 클릭 불가) | `hidden`
 - `public/<slug>/index.html` — 페이지 하나 = 폴더 하나 = HTML 파일 하나
 - `templates/basic.html` — 새 페이지 뼈대(메타태그, 파비콘, 목록 링크)
 - `apps-script/` — 구글폼 응답 수를 JSON으로 주는 Apps Script 코드(배포는 구글 쪽에서 수동)

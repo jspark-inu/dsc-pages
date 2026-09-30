@@ -1,0 +1,10 @@
+// dsinu.com — Cloudflare Worker (static assets only)
+// 배포: npm run deploy  (public/ 폴더 전체가 새 버전으로 올라감)
+// routes를 적지 않음 → 대시보드에서 붙인 dsinu.com 커스텀 도메인은 그대로 유지
+{
+  "name": "dsinu",
+  "compatibility_date": "2026-09-30",
+  "assets": {
+    "directory": "./public"
+  }
+}
