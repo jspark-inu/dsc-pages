@@ -1,15 +1,22 @@
 {
-  "_source": "thedieline.com @1440px 실측 (2026-09-30)",
-  "page_margin_px": 48,
-  "content_width_px": 1344,
-  "masthead": { "fill": "콘텐츠 폭 100%를 워드마크가 채움", "tagline": "굵은 16px 한 줄" },
-  "pill": { "height": 40, "radius": "full", "border": "1px #DADADA", "font": "16px / 500", "gap": 8, "dark_variant": "검정 배경 흰 글자" },
-  "rule_after_nav": "1px 검정",
-  "hero": { "image": "콘텐츠 폭 100%", "h1": "40px / 900 / line-height 44px", "dek": "16px / 1.7" },
-  "feed_row": {
-    "top_rule": "1px 검정", "padding_top": 24, "gap": 24,
-    "image_width_px": 990, "text_col_px": 330, "image_ratio": "16:9",
-    "title": "20px / 700 / 24px", "category": "20px / 400 / 25px", "dek": "14px / 21px",
-    "row_bottom_space": 100
-  }
+  "_source": "시안 07-1 덧붙이는 벽 (2026-10 적용). 이전 기준은 thedieline.com 편집형",
+  "fonts": { "display": "Black Han Sans", "display_alt": "Gasoek One", "body": "Pretendard Variable" },
+  "colors": {
+    "header": "#000000", "wall": "#262626", "wall_seam": "#313131", "list_band": "#141414", "accent": "#FFCF24",
+    "poster_palette": ["#1F3DFF/#FFFFFF", "#FFCF24/#000000", "#00A676/#000000", "#FF5A36/#000000", "#E9E4DA/#000000", "#000000/#FFCF24", "#F2A7D0/#000000", "#FFFFFF/#000000", "#0A0A0A/#FFFFFF"]
+  },
+  "header": { "height": 72, "padding_x": 40, "nav_button_height": 44, "cta": "노란 알약 44px, 15px/800" },
+  "wall": {
+    "stage_width": 1440, "frames": 22, "frame_source": "index.html FRAMES (자리, x, y, w, h, 기울기)",
+    "scale": "900px 이상은 1440 기준 무대를 화면 폭에 맞춰 축소, 900px 미만은 흐름 배치",
+    "poster_min_width": 214, "poster_max_width": 440, "tilt_deg": "±1.7 이내"
+  },
+  "motion": {
+    "paste": "clip-path inset 위→아래 0.64s power2.inOut + 반투명 롤러 띠 + scaleY 1.025→1",
+    "repaste_interval_s": 3.5,
+    "peel": "마우스 올리면 오른쪽 아래 34px(폰 28px) 모서리 벗겨짐",
+    "filter": "해당 분류 포스터를 자리 맨 위로 다시 붙이고 나머지 opacity .3"
+  },
+  "list": { "row_height": 48, "columns_desktop": 3, "title": "Black Han Sans 36px" },
+  "footer": { "height": 80 }
 }

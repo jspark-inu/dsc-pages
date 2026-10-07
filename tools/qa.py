@@ -20,13 +20,15 @@ with sync_playwright() as p:
           const h1s=document.querySelectorAll('h1').length;
           const imgsNoAlt=[...document.querySelectorAll('img')].filter(i=>!i.hasAttribute('alt')).length;
           const focusables=[...document.querySelectorAll('a[href],button,input')].filter(e=>e.offsetParent!==null).length;
-          return {hscroll: sw>cw+1, logoFill: lb? Math.round(lb.width/box.width*100):0, h1s, imgsNoAlt, focusables};
+          return {hscroll: sw>cw+1, hasMast: !!logo, logoFill: lb? Math.round(lb.width/box.width*100):0, posters: document.querySelectorAll('#wall .p').length, h1s, imgsNoAlt, focusables};
         }''')
         pg.keyboard.press('Tab'); pg.keyboard.press('Tab')
         fo=pg.evaluate('()=>{const e=document.activeElement;const s=getComputedStyle(e);return s.outlineStyle!=="none"||s.boxShadow!=="none"}')
         tag=f'[{w}px]'
         if r['hscroll']: fails.append(f'{tag} 가로 스크롤 발생')
-        if not (95<=r['logoFill']<=101): fails.append(f'{tag} 워드마크 폭 {r["logoFill"]}% (목표 95~101%)')
+        # 워드마크 폭 검사는 편집형(.mast .logo) 레이아웃일 때만. 07-1 벽 디자인은 포스터가 1장 이상 그려졌는지 본다
+        if r['hasMast'] and not (95<=r['logoFill']<=101): fails.append(f'{tag} 워드마크 폭 {r["logoFill"]}% (목표 95~101%)')
+        if not r['hasMast'] and r['posters']<1: fails.append(f'{tag} 벽에 포스터가 없음')
         if r['h1s']!=1: fails.append(f'{tag} h1 개수 {r["h1s"]} (1개여야 함)')
         if r['imgsNoAlt']: fails.append(f'{tag} alt 없는 이미지 {r["imgsNoAlt"]}개')
         if not fo: fails.append(f'{tag} 키보드 포커스 표시 없음')
