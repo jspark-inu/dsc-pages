@@ -41,8 +41,15 @@ Cloudflare Workers Builds가 이 저장소의 main 브랜치에 연결되어 있
 | makers |  | 표시 이름 배열. 본인 동의 확인된 경우만 |
 | cover |  | 스크린샷 경로 (/covers/<id>.webp, 1600×900 권장). 없으면 자동 차트 표지 |
 | tags |  | 자유 태그 |
+| facts |  | 포스터에 표로 넣을 사실 `[["항목","값"], ...]` (예: 인력사무소 마일리지 등급) |
+| factsTitle |  | facts 표 제목 (예: 마일리지) |
+| poster |  | 포스터 모양 고정: ev ft hd gi vt sp st br sc gr cv 중 하나. 없으면 id로 자동 |
+| color |  | 포스터 색 고정: blue yellow green orange beige black pink white ink 중 하나. 없으면 id로 자동 |
 
-화면 반영(thedieline.com 구조 그대로): 히어로 → 최신 행 12 → 2열 6 → 3열 나머지(서비스·소식 최신 순) → 전체 서비스 가로 슬라이드 → 분류별 슬라이드(분류에 운영 중 서비스 4개 이상일 때) → 많이 찾는 서비스(3개 이상 기록될 때, 이번 주/이번 달/올해/전체).
+화면 반영(시안 07-1 "덧붙이는 벽", 2026-10 적용, GSAP 3.15): 검은 헤더(분류·검색·pages.json의 feature 버튼) → 어두운 벽(#262626)에 서비스·소식이 등록일 순으로 찢긴 포스터로 붙음 → 전체 서비스 목록 → 소식 목록 → 많이 찾는 서비스(3개 이상 기록될 때, 이번 주/이번 달/올해/전체).
+- 벽 자리는 22개(1440 폭 기준 좌표, index.html의 FRAMES). 최신이 맨 위, 23번째부터는 같은 자리 아래로 겹친다. 한 자리에 2장 이상이면 3.5초마다 아래 포스터가 다시 덧붙는다
+- 포스터 모양·색은 항목 id로 고정(poster·color로 직접 지정 가능). 행사(type event 또는 date 있음)는 파란 행사 포스터, 1·2번째 큰 자리는 큰 제목 포스터
+- 900px 미만은 포스터가 한 줄(폰)·여러 줄(태블릿)로 흐르고 스크롤하면 하나씩 붙는다. 동작 줄이기 설정이면 애니메이션 없음
 더미 테스트: `https://dsinu.com/?demo=3` (N개, 최대 60). 기본 주소에는 절대 나오지 않는다.
 
 ## 서비스 이식 방식
@@ -58,9 +65,9 @@ external로 등록된 서비스는 한 학기 안에 path 또는 subdomain으로
 
 ## 배포 전 검사 (필수)
 푸시 전에 두 검사를 모두 통과해야 한다. 실패하면 고치고 다시 돌린다.
-- `python3 tools/qa.py public 8801` — 모바일 가로 스크롤, 워드마크 폭, h1 개수, 이미지 alt, 키보드 포커스, 콘솔 오류
+- `python3 tools/qa.py public 8801` — 모바일 가로 스크롤, 벽 포스터 표시(편집형 레이아웃이면 워드마크 폭), h1 개수, 이미지 alt, 키보드 포커스, 콘솔 오류
 - `python3 tools/copy_audit.py public 8802` — 소개·설명·설득 문구 탐지
-- 레이아웃 수치 기준은 `tools/layout_spec.json` (thedieline.com 실측). 간격·글자 크기를 바꿀 때 이 값에서 벗어나지 않는다
+- 레이아웃 수치 기준은 `tools/layout_spec.json` (시안 07-1). 간격·글자 크기를 바꿀 때 이 값에서 벗어나지 않는다
 - 필요: `pip install playwright && playwright install chromium`
 
 ## 페이지 만들기 ("~ 페이지 만들어줘")
@@ -69,6 +76,8 @@ external로 등록된 서비스는 한 학기 안에 path 또는 subdomain으로
 3. `public/pages.json`에 항목 추가
    - type: `event`(행사·공모전) | `notice`(공지) | `showcase`(학생 프로젝트·수상 홍보)
    - created: 오늘 날짜, expires: 행사면 행사 다음 날, 없으면 생략
+   - date: 행사일 YYYY-MM-DD (허브 포스터의 D-day 기준). 행사가 아니면 생략
+   - facts·poster·color: apps.json과 같은 선택 필드
 4. 로컬 확인(`npx wrangler dev` 또는 public 폴더 정적 서버) 후 커밋·푸시 → 자동 배포. 2분 뒤 실제 주소가 열리는지 확인하고 알려주기: `https://dsinu.com/<slug>/`
 
 ## 페이지 내리기 ("~ 내려줘")
