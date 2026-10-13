@@ -6,11 +6,19 @@
     "type": "event",
     "created": "2026-09-30",
     "expires": "2026-11-13",
-    "tags": ["데이터과학인의 밤", "공모전"],
+    "tags": [
+      "데이터과학인의 밤",
+      "공모전"
+    ],
     "feature": "서비스 공모전",
     "date": "2026-11-12",
     "facts": [
-      ["수상", "5팀"]
-    ]
+      [
+        "수상",
+        "5팀"
+      ]
+    ],
+    "apply": "https://docs.google.com/forms/d/e/1FAIpQLSe7tXbJzio17LBJJdTukWTtWBqRAi3uUvYJSKgWta8vsNNMBw/viewform?usp=header",
+    "applyLabel": "공모전 신청"
   }
 ]
